@@ -17,12 +17,10 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./examples/model_summary.jpg "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image2]: ./examples/raw_image.jpg
+[image3]: ./examples/YUV_image.jpg
+[image4]: ./examples/crop_yuv_image.jpg
+[image5]: ./examples/reflection_image.jpg
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -60,7 +58,9 @@ My model consists of a convolution neural network taken directly from [this pape
 
 [this paper by NVIDIA]: https://arxiv.org/pdf/1604.07316.pdf
 
-The model includes RELU layers to introduce nonlinearity, and the data is normalized and cropped in the model using a Keras layers (code lines 103, 106 resp.). 
+The model includes RELU layers to introduce nonlinearity, and the data is normalized and cropped in the model using a Keras layers (code lines 103, 106 resp.). The following image illustrates cropping, and also includes conversion to YUV scale.
+
+![alt text][image4]
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -87,7 +87,9 @@ It turned out that this architecture was enough for my model to succeed - this i
 
 Initially my changes resulted in worse performance. As I added data, I expected limiting accuracy to improve - and it did. As I added more subtle data - the recovery behaviour - the accuracy dropped, which was expected. This represented a decrease in the proportion of images that were straight driving, not a worseneing of the model; in fact as it adapted to a more varied data set it did become a better driver despite a falling accuracy rate.
 
-Some of the later changes to the model included transforming input images to YUV scale - I think this saved the network the task of finding one linear feature of the RGB images. It all helps!
+Some of the later changes to the model included transforming input images to YUV scale - this saved the network the task of finding one linear feature of the RGB images.
+
+![alt text][image3]
 
 Finally, using the near-straight dropping made the models work.
 
@@ -103,9 +105,13 @@ Here is a visualization of the architecture (note: visualizing the architecture 
 
 #### 3. Creation of the Training Set & Training Process
 
+![alt text][image2]
+
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover from minor errors. Recovering from major errors is beyond the scope of the project since it would entail recognising semantically rich features like 'road', 'on road' and 'off road'. 
 
-To augment the raw data sat, I flipped images and angles (reflected in vertical line).
+To augment the raw data sat, I flipped images and angles (reflected in vertical line) as below.
+
+![alt text][image5]
 
 After the collection process, I had 12000-23000 data points (12k for model_0, 23k for models that failed, then 17k for model_6; I deleted data I had recorded which proved too taxing for the model, or if I'm honest, data in which my driving was too bad). I then preprocessed this data by converting to YUV scale and cropping to remove the bonnet and sky. The bonnet was minor a waste of computing resources, while the sky was a waste of neural activity since the model would. at least initially, detect entirely contingent features such as "whenever two poplars line up next to a palm tree in the shade I must turn right". 
 
