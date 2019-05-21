@@ -7,3 +7,5 @@ Use the following command to activate autonomous mode using my model, then selec
     python drive.py model_6_2.h5
 
 You can also watch my recording of an autonomous lap (run.mp4), and the first 5 seconds of the features identified at the 2nd convolutional layer (run_hidden.mp4).
+
+<video src="run_hidden.mp4" width="320" height="200" controls preload></video>
